@@ -35,5 +35,15 @@ def encurtar():
     ), 201
 
 
+@app.route("/<codigo>", methods=["GET"])
+def redirecionar(codigo):
+    url_original = url_db[codigo]
+
+    if url_original:
+        return redirect(url_original)
+    else:
+        return jsonify({"erro": "URL curta não encontrada"}), 404
+
+
 if __name__ == "__main__":
     app.run(debug=True)
