@@ -43,20 +43,24 @@ def encurtar():
     url_original = dados["url"]
 
     for _ in range(5):
-            codigo = gerar_codigo()
-            # Verifica se já existe usando o ORM
-            if not Link.query.filter_by(codigo_curto=codigo).first():
-                novo_link = Link(codigo_curto=codigo, url_original=url_original)
-                db.session.add(novo_link)
-                db.session.commit()
+        codigo = gerar_codigo()
+        # Verifica se já existe usando o ORM
+        if not Link.query.filter_by(codigo_curto=codigo).first():
+            novo_link = Link(codigo_curto=codigo, url_original=url_original)
+            db.session.add(novo_link)
+            db.session.commit()
 
-                return jsonify({
-                    'url_original': url_original,
-                    'url_curta': f"{request.host_url}{codigo}",
-                    'codigo': codigo
-                }), 201
+            return jsonify(
+                {
+                    "url_original": url_original,
+                    "url_curta": f"{request.host_url}{codigo}",
+                    "codigo": codigo,
+                }
+            ), 201
 
-        return jsonify({'erro': 'Não foi possível gerar um código único, tente novamente.'}), 500
+    return jsonify(
+        {"erro": "Não foi possível gerar um código único, tente novamente."}
+    ), 500
 
 
 @app.route("/<codigo>", methods=["GET"])
